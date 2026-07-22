@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NOVA Merchant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="admin-page">
+    <div class="ambient ambient-a" aria-hidden="true"></div>
+    <div class="ambient ambient-b" aria-hidden="true"></div>
+
+    <main class="shell admin-auth-shell" id="adminAuthShell">
+      <section class="login-panel admin-login-card" aria-labelledby="adminAuthTitle">
+        <div class="brand-mark" aria-hidden="true">
+          <span></span>
+        </div>
+
+        <div class="heading">
+          <p class="eyebrow">Merchant Console</p>
+          <h1 id="adminAuthTitle">حساب التاجر</h1>
+          <p class="subhead" id="adminAuthSubhead">لوحة إدارة المتجر.</p>
+        </div>
+
+        <form class="login-form" id="adminAuthForm" novalidate>
+          <label class="field" for="adminUsername">
+            <span>اسم المستخدم</span>
+            <div class="input-wrap">
+              <i data-lucide="user-round-cog" aria-hidden="true"></i>
+              <input id="adminUsername" type="text" autocomplete="username" placeholder="merchant" required />
+            </div>
+          </label>
+
+          <label class="field" for="adminPassword">
+            <span>كلمة المرور</span>
+            <div class="input-wrap">
+              <i data-lucide="shield-check" aria-hidden="true"></i>
+              <input id="adminPassword" type="password" autocomplete="current-password" minlength="4" required />
+            </div>
+          </label>
+
+          <label class="field is-hidden" id="adminConfirmField" for="adminConfirmPassword">
+            <span>تأكيد كلمة المرور</span>
+            <div class="input-wrap">
+              <i data-lucide="lock-keyhole" aria-hidden="true"></i>
+              <input id="adminConfirmPassword" type="password" autocomplete="new-password" minlength="4" />
+            </div>
+          </label>
+
+          <button class="submit-button" type="submit">
+            <span id="adminSubmitText">دخول</span>
+            <span class="submit-icon" aria-hidden="true">
+              <i data-lucide="log-in"></i>
+            </span>
+          </button>
+          <p class="form-message" id="adminAuthMessage" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <main class="merchant-shell is-hidden" id="adminDashboard">
+      <aside class="merchant-sidebar" aria-label="قائمة لوحة التاجر">
+        <div class="sidebar-brand">
+          <a class="sidebar-exit" href="./index.html" aria-label="واجهة العميل">
+            <i data-lucide="arrow-right" aria-hidden="true"></i>
+          </a>
+          <div class="sidebar-logo">
+            <strong>زد</strong>
+            <i data-lucide="sparkles" aria-hidden="true"></i>
+          </div>
+          <button class="sidebar-add" id="quickAddButton" type="button">
+            <span>إضافة</span>
+            <i data-lucide="plus" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div class="sidebar-mode-tabs" aria-label="اختصارات">
+          <button class="active" type="button" data-view-shortcut="dashboard" aria-label="لوحة التحكم">
+            <i data-lucide="home" aria-hidden="true"></i>
+          </button>
+          <button type="button" data-view-shortcut="channels" aria-label="التطبيقات والقنوات">
+            <i data-lucide="sliders-horizontal" aria-hidden="true"></i>
+          </button>
+          <button type="button" data-view-shortcut="storefront" aria-label="إعدادات المتجر">
+            <i data-lucide="settings" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <nav class="merchant-nav">
+          <button type="button" data-view="dashboard">
+            <i data-lucide="home" aria-hidden="true"></i>
+            <span>لوحة التحكم</span>
+          </button>
+          <button class="active" type="button" data-view="orders">
+            <i data-lucide="shopping-cart" aria-hidden="true"></i>
+            <span>الطلبات</span>
+          </button>
+          <button type="button" data-view="manualOrders">
+            <i data-lucide="clipboard-list" aria-hidden="true"></i>
+            <span>كل الطلبات</span>
+          </button>
+          <button type="button" data-view="abandoned">
+            <i data-lucide="shopping-bag" aria-hidden="true"></i>
+            <span>السلات المتروكة</span>
+          </button>
+          <button type="button" data-view="products">
+            <i data-lucide="shirt" aria-hidden="true"></i>
+            <span>المنتجات</span>
+          </button>
+          <button type="button" data-view="customers">
+            <i data-lucide="users-round" aria-hidden="true"></i>
+            <span>العملاء</span>
+          </button>
+          <button type="button" data-view="marketing">
+            <i data-lucide="megaphone" aria-hidden="true"></i>
+            <span>التسويق</span>
+          </button>
+          <button type="button" data-view="whatsapp">
+            <i data-lucide="message-circle" aria-hidden="true"></i>
+            <span>الواتساب</span>
+          </button>
+          <button type="button" data-view="storefront">
+            <i data-lucide="store" aria-hidden="true"></i>
+            <span>المتجر الإلكتروني</span>
+          </button>
+          <button type="button" data-view="analytics">
+            <i data-lucide="bar-chart-3" aria-hidden="true"></i>
+            <span>التحليلات</span>
+          </button>
+          <button type="button" data-view="finance">
+            <i data-lucide="wallet-cards" aria-hidden="true"></i>
+            <span>المالية</span>
+          </button>
+          <button type="button" data-view="logistics">
+            <i data-lucide="package" aria-hidden="true"></i>
+            <span>اللوجستيات</span>
+          </button>
+          <button type="button" data-view="payments">
+            <i data-lucide="credit-card" aria-hidden="true"></i>
+            <span>المدفوعات</span>
+          </button>
+          <button type="button" data-view="funding">
+            <i data-lucide="landmark" aria-hidden="true"></i>
+            <span>التمويل</span>
+          </button>
+          <button type="button" data-view="growth">
+            <i data-lucide="activity" aria-hidden="true"></i>
+            <span>النمو</span>
+          </button>
+          <button type="button" data-view="channels">
+            <i data-lucide="box" aria-hidden="true"></i>
+            <span>القنوات</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-upgrade">
+          <strong>الوصول إلى لوحة التحكم المتقدمة</strong>
+          <p>يمكنك التحكم في أدوات المتجر من مكان واحد.</p>
+          <button type="button" data-view-shortcut="growth">الرجوع الآن</button>
+        </div>
+      </aside>
+
+      <section class="merchant-main">
+        <header class="merchant-topbar">
+          <div class="topbar-tools">
+            <button id="adminLogoutButton" type="button" aria-label="خروج">
+              <i data-lucide="log-out" aria-hidden="true"></i>
+            </button>
+            <button id="themeToggleButton" type="button" aria-label="تبديل الإضاءة">
+              <i data-lucide="sun" aria-hidden="true"></i>
+            </button>
+            <button id="notificationButton" type="button" aria-label="التنبيهات">
+              <i data-lucide="bell" aria-hidden="true"></i>
+              <span id="notificationCount">0</span>
+            </button>
+            <button id="ordersShortcutButton" type="button">
+              <i data-lucide="ticket" aria-hidden="true"></i>
+              <span id="ordersShortcutCount">0</span>
+            </button>
+            <button id="cashShortcutButton" type="button">
+              <span>كاش</span>
+              <i data-lucide="sparkles" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <label class="merchant-search" for="adminGlobalSearch">
+            <kbd>Ctrl + K</kbd>
+            <input id="adminGlobalSearch" type="search" placeholder="بحث" autocomplete="off" />
+            <i data-lucide="search" aria-hidden="true"></i>
+          </label>
+        </header>
+
+        <section class="merchant-view" id="adminView" aria-live="polite"></section>
+      </section>
+
+      <div class="merchant-toast is-hidden" id="merchantToast" role="status" aria-live="polite"></div>
+      <div class="merchant-modal is-hidden" id="adminModal" aria-hidden="true">
+        <div class="merchant-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+          <button class="icon-button modal-close" id="modalCloseButton" type="button" aria-label="إغلاق">
+            <i data-lucide="x" aria-hidden="true"></i>
+          </button>
+          <div id="modalBody"></div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="./admin.js"></script>
+  </body>
+</html>
