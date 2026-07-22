@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NOVA Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.165.0/build/three.module.js"
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <canvas id="scene" aria-hidden="true"></canvas>
+    <div class="ambient ambient-a" aria-hidden="true"></div>
+    <div class="ambient ambient-b" aria-hidden="true"></div>
+
+    <main class="shell" id="authShell">
+      <section class="login-panel" aria-labelledby="login-title">
+        <div class="brand-mark" aria-hidden="true">
+          <span></span>
+        </div>
+
+        <div class="heading">
+          <p class="eyebrow">Secure Store</p>
+          <h1 id="login-title">بوابة الدخول</h1>
+          <p class="subhead" id="formSubhead">أدخل بياناتك للمتابعة إلى متجر NOVA.</p>
+        </div>
+
+        <div class="mode-switch" role="tablist" aria-label="اختيار نوع النموذج">
+          <button class="mode-tab active" type="button" data-mode="login" role="tab" aria-selected="true">
+            تسجيل الدخول
+          </button>
+          <button class="mode-tab" type="button" data-mode="signup" role="tab" aria-selected="false">
+            إنشاء حساب
+          </button>
+        </div>
+
+        <form class="login-form" id="loginForm" novalidate>
+          <label class="field" for="username">
+            <span>اسم المستخدم</span>
+            <div class="input-wrap">
+              <i data-lucide="user-round" aria-hidden="true"></i>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                autocomplete="username"
+                placeholder="username"
+                required
+              />
+            </div>
+          </label>
+
+          <label class="field" for="password">
+            <span>كلمة المرور</span>
+            <div class="input-wrap">
+              <i data-lucide="lock-keyhole" aria-hidden="true"></i>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="••••••••"
+                minlength="4"
+                required
+              />
+              <button class="icon-button" id="togglePassword" type="button" aria-label="إظهار كلمة المرور">
+                <i data-lucide="eye" aria-hidden="true"></i>
+              </button>
+            </div>
+          </label>
+
+          <label class="field signup-only is-hidden" for="confirmPassword">
+            <span>تأكيد كلمة المرور</span>
+            <div class="input-wrap">
+              <i data-lucide="shield-check" aria-hidden="true"></i>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                autocomplete="new-password"
+                placeholder="••••••••"
+                minlength="4"
+              />
+            </div>
+          </label>
+
+          <div class="form-row">
+            <label class="remember">
+              <input type="checkbox" name="remember" id="remember" />
+              <span id="rememberText">تذكرني</span>
+            </label>
+            <a href="#" id="resetLink" aria-label="استعادة كلمة المرور">نسيت كلمة المرور؟</a>
+          </div>
+
+          <button class="submit-button" type="submit">
+            <span id="submitText">دخول</span>
+            <span class="submit-icon" id="submitIconSlot" aria-hidden="true">
+              <i data-lucide="log-in"></i>
+            </span>
+          </button>
+
+          <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="merchant-entry">
+          <span>هل تملك متجرًا؟</span>
+          <button type="button" id="merchantJoinAuthButton">انضم معنا كتاجر</button>
+          <a href="./admin.html">دخول التاجر</a>
+        </div>
+      </section>
+    </main>
+
+    <main class="store-app is-hidden" id="storeApp">
+      <header class="store-header">
+        <div class="store-brand" aria-label="NOVA Store">
+          <div class="store-logo" aria-hidden="true">
+            <i data-lucide="shopping-bag"></i>
+          </div>
+          <div>
+            <span>NOVA Store</span>
+            <strong>متجر التقنية</strong>
+          </div>
+        </div>
+
+        <label class="search-field header-search" for="productSearch">
+          <i data-lucide="search" aria-hidden="true"></i>
+          <input id="productSearch" type="search" placeholder="ابحث عن سماعة، شاشة، شاحن..." autocomplete="off" />
+          <button class="search-clear" id="clearSearchButton" type="button" aria-label="مسح البحث">
+            <i data-lucide="x" aria-hidden="true"></i>
+          </button>
+        </label>
+
+        <div class="header-actions">
+          <button class="merchant-join-button" id="merchantJoinButton" type="button">
+            <i data-lucide="store" aria-hidden="true"></i>
+            <span>انضم كتاجر</span>
+          </button>
+          <button class="header-cart" id="openCheckoutButton" type="button" aria-label="فتح السلة والدفع">
+            <i data-lucide="shopping-bag" aria-hidden="true"></i>
+            <span>السلة والدفع</span>
+            <strong id="metricCart">0</strong>
+          </button>
+          <div class="user-chip">
+            <i data-lucide="user-round-check" aria-hidden="true"></i>
+            <span id="storeUser">user</span>
+            <button class="icon-button logout-button" id="logoutButton" type="button" aria-label="تسجيل الخروج">
+              <i data-lucide="log-out" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <nav class="category-strip" aria-label="تصنيفات المنتجات">
+        <button class="category-link active" type="button" data-category="all">
+          <i data-lucide="layout-grid" aria-hidden="true"></i>
+          <span>الكل</span>
+          <small id="countAll">0</small>
+        </button>
+        <button class="category-link" type="button" data-category="audio">
+          <i data-lucide="headphones" aria-hidden="true"></i>
+          <span>الصوتيات</span>
+          <small id="countAudio">0</small>
+        </button>
+        <button class="category-link" type="button" data-category="desk">
+          <i data-lucide="monitor" aria-hidden="true"></i>
+          <span>المكتب</span>
+          <small id="countDesk">0</small>
+        </button>
+        <button class="category-link" type="button" data-category="digital">
+          <i data-lucide="key-round" aria-hidden="true"></i>
+          <span>الرقميات</span>
+          <small id="countDigital">0</small>
+        </button>
+        <button class="category-link" type="button" data-category="accessories">
+          <i data-lucide="cable" aria-hidden="true"></i>
+          <span>الإكسسوارات</span>
+          <small id="countAccessories">0</small>
+        </button>
+      </nav>
+
+      <section class="store-main" aria-labelledby="storeTitle">
+        <section class="store-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Premium Tech</p>
+            <h1 id="storeTitle">جهّز مكتبك بأدوات تقنية مختارة</h1>
+            <p>منتجات تقنية جاهزة للطلب، مع تجربة شراء واضحة وخطوة دفع مستقلة.</p>
+          </div>
+        </section>
+
+        <section class="offers-strip" aria-label="العروض والتخفيضات">
+          <button class="offer-card offer-a" type="button" data-offer-category="audio">
+            <span class="offer-icon"><i data-lucide="headphones" aria-hidden="true"></i></span>
+            <span>خصم 15%</span>
+            <strong>الصوتيات</strong>
+            <small>سماعات ومايكات مختارة</small>
+          </button>
+          <button class="offer-card offer-b" type="button" data-offer-category="accessories">
+            <span class="offer-icon"><i data-lucide="sparkles" aria-hidden="true"></i></span>
+            <span>خصم 10%</span>
+            <strong>الإكسسوارات</strong>
+            <small>شواحن وحوامل ومستلزمات</small>
+          </button>
+          <button class="offer-card offer-c" type="button" data-offer-category="all">
+            <span class="offer-icon"><i data-lucide="truck" aria-hidden="true"></i></span>
+            <span>شحن مجاني</span>
+            <strong>لطلبات 500 ر.س+</strong>
+            <small>يطبق تلقائيًا في السلة</small>
+          </button>
+        </section>
+
+        <section class="store-toolbar" aria-label="فرز المنتجات">
+          <div class="toolbar-title">
+            <h2>منتجات المتجر</h2>
+            <p>أضف أكثر من منتج، ثم افتح السلة والدفع من القائمة العلوية.</p>
+          </div>
+          <label class="select-field" for="sortProducts">
+            <span>الفرز</span>
+            <select id="sortProducts">
+              <option value="featured">الأبرز</option>
+              <option value="priceAsc">الأقل سعرًا</option>
+              <option value="priceDesc">الأعلى سعرًا</option>
+              <option value="rating">الأعلى تقييمًا</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="store-layout">
+          <section class="product-grid" id="productGrid" aria-live="polite"></section>
+        </section>
+      </section>
+
+      <div class="cart-toast" id="cartToast" role="status" aria-live="polite">
+        <i data-lucide="check" aria-hidden="true"></i>
+        <span>تمت الإضافة للسلة</span>
+      </div>
+
+      <div class="checkout-overlay is-hidden" id="checkoutOverlay" aria-hidden="true"></div>
+      <aside class="cart-panel checkout-drawer is-hidden" id="cartPanel" aria-labelledby="cartTitle">
+        <div class="cart-head">
+          <div>
+            <p class="eyebrow">Checkout</p>
+            <h2 id="cartTitle">السلة والدفع</h2>
+          </div>
+          <div class="cart-actions">
+            <button class="icon-button" id="clearCartButton" type="button" aria-label="تفريغ السلة">
+              <i data-lucide="trash-2" aria-hidden="true"></i>
+            </button>
+            <button class="icon-button" id="closeCheckoutButton" type="button" aria-label="إغلاق قائمة الدفع">
+              <i data-lucide="x" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="payment-step">
+          <span>1</span>
+          <p>راجع المنتجات ثم أدخل رقم الجوال لإتمام الطلب.</p>
+        </div>
+
+        <div class="cart-items" id="cartItems"></div>
+
+        <div class="cart-summary">
+          <div>
+            <span>المجموع</span>
+            <strong id="subtotalText">0 ر.س</strong>
+          </div>
+          <div>
+            <span>الضريبة 15%</span>
+            <strong id="vatText">0 ر.س</strong>
+          </div>
+          <div>
+            <span>الشحن</span>
+            <strong id="shippingText">0 ر.س</strong>
+          </div>
+          <div class="grand-total">
+            <span>الإجمالي</span>
+            <strong id="totalText">0 ر.س</strong>
+          </div>
+        </div>
+
+        <form class="checkout-form" id="checkoutForm">
+          <label for="customerPhone">رقم الجوال</label>
+          <input id="customerPhone" type="tel" placeholder="05xxxxxxxx" required />
+          <button class="checkout-button" type="submit">
+            <span>تأكيد الطلب</span>
+            <i data-lucide="badge-check" aria-hidden="true"></i>
+          </button>
+          <p class="checkout-message" id="checkoutMessage" role="status" aria-live="polite"></p>
+          <div class="digital-delivery is-hidden" id="digitalDelivery" aria-live="polite"></div>
+        </form>
+      </aside>
+    </main>
+
+    <div class="merchant-join-overlay is-hidden" id="merchantJoinOverlay" aria-hidden="true"></div>
+    <section class="merchant-join-modal is-hidden" id="merchantJoinModal" aria-labelledby="merchantJoinTitle" aria-modal="true" role="dialog">
+      <div class="merchant-join-card">
+        <button class="icon-button merchant-join-close" id="closeMerchantJoinButton" type="button" aria-label="إغلاق طلب الانضمام">
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+        <div class="merchant-join-head">
+          <p class="eyebrow">Merchant Program</p>
+          <h2 id="merchantJoinTitle">انضم معنا كتاجر</h2>
+          <p>أرسل بيانات متجرك، ثم سجّل دخولك إلى لوحة التاجر لإضافة المنتجات وإدارة الطلبات.</p>
+        </div>
+
+        <form class="merchant-join-form" id="merchantJoinForm">
+          <div class="merchant-form-grid">
+            <label>
+              <span>اسم المتجر</span>
+              <input name="storeName" type="text" placeholder="مثال: متجر التقنية" required />
+            </label>
+            <label>
+              <span>اسم المالك</span>
+              <input name="ownerName" type="text" placeholder="الاسم الكامل" required />
+            </label>
+            <label>
+              <span>البريد الإلكتروني</span>
+              <input name="email" type="email" placeholder="merchant@example.com" required />
+            </label>
+            <label>
+              <span>رقم الجوال</span>
+              <input name="phone" type="tel" placeholder="05xxxxxxxx" required />
+            </label>
+            <label>
+              <span>نوع النشاط</span>
+              <select name="businessType" required>
+                <option value="">اختر نوع النشاط</option>
+                <option value="digital">منتجات رقمية وأكواد</option>
+                <option value="electronics">إلكترونيات وإكسسوارات</option>
+                <option value="subscriptions">اشتراكات وحسابات</option>
+                <option value="mixed">متجر متنوع</option>
+              </select>
+            </label>
+            <label>
+              <span>اسم مستخدم التاجر</span>
+              <input name="merchantUsername" type="text" placeholder="merchant" required />
+            </label>
+            <label>
+              <span>كلمة مرور التاجر</span>
+              <input name="merchantPassword" type="password" minlength="4" placeholder="••••••••" required />
+            </label>
+            <label>
+              <span>تأكيد كلمة المرور</span>
+              <input name="merchantConfirmPassword" type="password" minlength="4" placeholder="••••••••" required />
+            </label>
+          </div>
+
+          <label class="merchant-terms">
+            <input name="terms" type="checkbox" required />
+            <span>أوافق على أن المنتجات المضافة يجب أن تكون مرخصة، قابلة للتسليم، وخالية من أي بيانات مخالفة أو غير مصرح ببيعها.</span>
+          </label>
+
+          <div class="merchant-join-actions">
+            <a href="./admin.html">لدي حساب تاجر</a>
+            <button class="checkout-button" type="submit">
+              <span>إرسال الطلب والمتابعة</span>
+              <i data-lucide="arrow-left" aria-hidden="true"></i>
+            </button>
+          </div>
+          <p class="checkout-message" id="merchantJoinMessage" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
